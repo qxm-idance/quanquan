@@ -305,8 +305,8 @@ main.controller('homeworkEvaluationCtrl', ['$scope','dialogs','CS','$stateParams
         CS.teacherHomeworkChecked({classCode:$stateParams.classCode,homeworkId:$stateParams.homeworkId,token:getToken()}).then(function(d){
             d=d.data;
             if(d.state){
-                $scope.toAll=d.toAll;
-                $scope.toAllOld=d.toAll;
+                $scope.p.toAll=d.toAll;
+                $scope.p.toAllOld=d.toAll;
                 // console.log($scope.toAllOld);
                 $scope.toSome=d.toSome;
             }else{
@@ -349,7 +349,7 @@ main.controller('homeworkEvaluationCtrl', ['$scope','dialogs','CS','$stateParams
                 _.each($scope.students,function(it){
                     it.dis=false;
                 });
-                $scope.p.children=_.pluck($scope.students, 'childNo').join(',');
+                $scope.p.children=_.pluck($scope.students, 'childNo').join(',')||'';
             }
 
         }else{
@@ -388,7 +388,8 @@ main.controller('homeworkEvaluationCtrl', ['$scope','dialogs','CS','$stateParams
         var toSelf='{'+_.pluck($scope.persEvalList, 'toSelf').join('},{')+'}';
         var toSelfContent='{'+ _.pluck($scope.persEvalList, 'toSelfContent').join('},{')+'}';
         var isPrivat=_.pluck($scope.persEvalList, 'isPrivat').join(',');
-        var data={classCode:$stateParams.classCode,homeworkId:$stateParams.homeworkId,children:$scope.p.children,toAll:$scope.toAll,'toSelf':toSelf,'toSelfContent':toSelfContent,'isPrivat':isPrivat,token:getToken()};
+        var data={classCode:$stateParams.classCode,homeworkId:$stateParams.homeworkId,children:$scope.p.children,toAll:$scope.p.toAll,'toSelf':toSelf,'toSelfContent':toSelfContent,'isPrivat':isPrivat,token:getToken()};
+        console.log(data);
         CS.teacherCheckHomework(data).then(function(d){
             d=d.data;
             if(d.state){
@@ -401,8 +402,8 @@ main.controller('homeworkEvaluationCtrl', ['$scope','dialogs','CS','$stateParams
     //取消发布作业
     $scope.cancelEvaluation=function(){
         $scope.persEvalList=[{'toSelf':[],'toSelfContent':'','addBtnShow':true,'toSelfShow':false,'addStuPlshow':false,'_ind':0,isPrivat:0}];
-        $scope.toAll='';
-        console.log($scope.toAll);
+        $scope.p.toAll='';
+        console.log($scope.p.toAll);
     }
     //获取作业展示内容
     $scope.getHomeworkList=function(){

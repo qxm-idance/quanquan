@@ -9,7 +9,7 @@
             <div class="mod-bd">
                 <h3>作业评价</h3>
                 <div>
-                    <div class="work-evaluation unEvalu" ng-if="operType==2 && toAll=='' && toSome[0]=='' ">
+                    <div class="work-evaluation unEvalu" ng-if="operType==2 && p.toAll=='' && toSome[0]=='' ">
                         <div>
                             <a href="javascript:void(0)" ng-click="changeOperType()">还没做出任何评价，请尽快评价！</a>
                             <p><a href="javascript:void(0)" class="btn-evaluate pull-right" ng-click="changeOperType()"></a></p>
@@ -18,8 +18,8 @@
                     <!--评价作业操作 start-->
                     <div class="work-evaluation doEvalu" ng-if="operType==1 || operType==3">
                         <div class="whole">
-                            <label>整体评价</label>
-                            <textarea autofocus placeholder="#编辑内容#" ng-model="toAll"></textarea>
+                            <label>整体评价</label>{{p.toAll}}--p.ch{{p.children}}
+                            <textarea autofocus placeholder="#编辑内容#" ng-model="p.toAll"></textarea>
                         </div>
                         <div class="personal">
                             <label>个别评价</label>
@@ -63,7 +63,7 @@
                         </div>
                         <div class="modal-footer no-am-bt">
 
-                            <button type="button" class="btn btn-default btn-do" ng-click="setEvaluation()"  ng-class="{disabled:!toAll && !persEvalList[0].toSelfContent}" title="{{{true: '个体评价和整体评价至少填一个', false: ''}[!toAll && !persEvalList[0].toSelfContent]}}" ng-disabled="!toAll && !persEvalList[0].toSelfContent" >发布</button>
+                            <button type="button" class="btn btn-default btn-do" ng-click="setEvaluation()"  ng-class="{disabled:!p.toAll && !persEvalList[0].toSelfContent}" title="{{{true: '个体评价和整体评价至少填一个', false: ''}[!p.toAll && !persEvalList[0].toSelfContent]}}" ng-disabled="!p.toAll && !persEvalList[0].toSelfContent" >发布</button>
 
                             <button type="button" class="btn btn-default btn-cancel" ng-click="cancelEvaluation()">取消</button>
                         </div>
@@ -71,11 +71,11 @@
                     <!--评价作业操作 end-->
                 </div>
                 <!--评价详情展示 start-->
-                <div ng-if="operType==2&&(toAll!='' || toSome[0]!='')">
+                <div ng-if="operType==2&&(p.toAll!='' || toSome[0]!='')">
                     <div class="work-evaluation evalued" >
                         <div class="all">
                             <label class="col-self-tit">整体评价:</label>
-                            <div class="col-self-con">{{toAll}}</div>
+                            <div class="col-self-con">{{p.toAll}}</div>
                         </div>
                         <div class="personal" >
                             <label class="col-self-tit">个别评价:</label>
