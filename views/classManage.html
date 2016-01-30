@@ -12,8 +12,8 @@
                         <div class="list-wrapper">
                             <strong class="user-name" ng-bind="item.teacherName"></strong>
                             <div class="user-pic">
-                                <img ng-src="{{item.picUrl}}" width="90" height="90">
-                                <!-- <img src="images/teacher.png"> -->
+                                <!-- <img ng-src="{{item.picUrl}}" width="90" height="90"> -->
+                                <img src="images/teacher.png" width="90" height="90">
                             </div>
                             <p classs="user-role" ng-bind="item.role"></p>
                             <p class="user-telno">TEl:{{item.teacherId}}</p>
@@ -34,8 +34,8 @@
                     <li ng-repeat="item in children">
                         <div class="list-wrapper">
                             <div class="stu-info">
-                                <div class="user-pic">
-                                    <img ng-src="{{item.avatar}}" width="85" height="85">
+                                <div class="user-pic"> 
+                                    <img ng-src="{{item.avatar? contextPath+'/'+item.avatar : ''}}" width="85" height="85">
                                     <!-- <img src="images/stu.png" width="85" height="85"> -->
                                 </div>
                                 <p class="user-No-name"><strong class="user-No" ng-bind="item.childNo"></strong><strong ng-bind="item.childName">渣渣站</strong></p>

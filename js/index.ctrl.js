@@ -10,19 +10,23 @@ main.controller('indexCtrl', ['$scope','dialogs','CS','$rootScope','$filter',fun
                 it.classNameSch=it.classNameWhole[0];
                 it.classNameCla=it.classNameWhole[1];
             })
+            console.log($scope.classes);
             if($scope.classes&&$scope.classes.length>0){
                 $scope.getNoticeList();
             }
         }else{
-            dialogs.error("error",'msg',{'width':300});
+            // dialogs.error("error",'msg',{'width':300});
         }
     });
+
     //teacher info
     CS.qqPersonInfo({token:getToken()}).then(function(d){
         d= d.data;
         if(d.state){
             $scope.p.tchName=d.userName;
+            console.log($scope.p.tchName);
             $rootScope.userName=d.userName;
+            $rootScope.role=d.role;
             if(d.role!='master'){
                 $scope.p.tchRole="任课老师";
                 switch($scope.p.tchRole){
@@ -47,7 +51,7 @@ main.controller('indexCtrl', ['$scope','dialogs','CS','$rootScope','$filter',fun
                 $scope.p.tchClass='';
             }
         }else{
-            dialogs.error("error",'msg',{'width':300});
+            // dialogs.error("error",'msg',{'width':300});
         }
     });
 
@@ -58,7 +62,7 @@ main.controller('indexCtrl', ['$scope','dialogs','CS','$rootScope','$filter',fun
             if(d.state){
                 $scope.noticeList=d.noticeList.slice(0,8);
             }else{
-
+                // dialogs.error("error",'msg',{'width':300});
             }
         });
     }
@@ -86,7 +90,7 @@ main.controller('indexCtrl', ['$scope','dialogs','CS','$rootScope','$filter',fun
                 $scope.chartData[$index].classCode=it.classCode;
             });           
         }else{
-            dialogs.error("Error","error",{'width':300});
+            // dialogs.error("Error","error",{'width':300});
         }
     });
     $scope.setHomework=function(){
@@ -108,28 +112,29 @@ main.controller('indexCtrl', ['$scope','dialogs','CS','$rootScope','$filter',fun
                 if(d.state){
                     $scope.getNoticeList();
                 }else{
-                    dialogs.error("error",'failed',{'width':300});
+                    // dialogs.error("error",'failed',{'width':300});
                 }
             });
         });
     }
 
     $scope.loginOut=function(){
-        dialogs.confirm("确定退出么？",'',{'width':300}).result.then(function(){
-            CS.webQqLogout({token:getToken()}).then(function(d){
-                d=d.data;
-                if(d.state){
+        // dialogs.confirm("确定退出么？",'',{'width':300}).result.then(function(){
+        //     CS.webQqLogout({token:getToken()}).then(function(d){
+        //         d=d.data;
+        //         if(d.state){
                     location.href='login.jsp';
-                }else{
-                    dialogs.error('failed',{'width':300});
-                }
-            })
-        });
+        //         }else{
+        //             dialogs.error('退出登录失败',{'width':300});
+        //         }
+        //     })
+        // });
     }
-    
+
 }]);
 
-main.controller('classManageCtrl', ['$scope', 'dialogs','CS',function ($scope,dialogs,CS){
+main.controller('classManageCtrl', ['$scope', 'dialogs','CS','$rootScope',function ($scope,dialogs,CS,$rootScope){
+    $rootScope.contextPath = contextPath;
     //老师管理加入的班级
     CS.teacherMyClass({token:getToken()}).then(function(d){
         d= d.data;
@@ -144,7 +149,7 @@ main.controller('classManageCtrl', ['$scope', 'dialogs','CS',function ($scope,di
                 $scope.getClassDetail($scope.classes[0].classCode);
             }
         }else{
-            dialogs.error("error",'msg',{'width':300});
+            // dialogs.error("error",'msg',{'width':300});
         }
     });
     $scope.currentPage=1;
@@ -160,7 +165,7 @@ main.controller('classManageCtrl', ['$scope', 'dialogs','CS',function ($scope,di
                 $scope.teachers = d.teachers;
                 $scope.teacherTotal = d.teachers.length;
             } else {
-                dialogs.error("error",'msg',{'width':300});
+                // dialogs.error("error",'msg',{'width':300});
             }
         })
     }
@@ -186,7 +191,7 @@ main.controller('noticeManageCtrl', ['$scope', 'dialogs','CS',function ($scope,d
                 $scope.getNoticeList($scope.classes[0].classCode,1);
             }
         }else{
-            dialogs.error("error",'msg',{'width':300});
+            // dialogs.error("error",'msg',{'width':300});
         }
     });
 
@@ -201,7 +206,7 @@ main.controller('noticeManageCtrl', ['$scope', 'dialogs','CS',function ($scope,d
                     // $scope.getNoticeList(classCode,1);
                     // dialogs.notify('Notify',"公告发布成功!",{'width':300});
                 }else{
-                    dialogs.error("error",'msg',{'width':300});
+                    // dialogs.error("error",'msg',{'width':300});
                 }
             });
         });
@@ -219,20 +224,18 @@ main.controller('noticeManageCtrl', ['$scope', 'dialogs','CS',function ($scope,d
         CS.qqNoticeList({classCode:classCode,page:currentPage,channel:'web',token:getToken()}).then(function(d){
             d=d.data;
             if(d.state){
-                // $scope.noticeList=d.noticeList;
-                // $scope.totalItems=d.noticeList.length;
                 $scope.totalItems=d.total;
                 $scope.noticeList=d.noticeList
-                // $scope.noticeList=d.noticeList.slice((currentPage-1)*$scope.pageSize,currentPage*$scope.pageSize);
             }else{
-                dialogs.error("error",'msg',{'width':300});
+                // dialogs.error("error",'msg',{'width':300});
             }
         });
     }
 }]);
 
-main.controller('homeworkManageCtrl', ['$scope','dialogs','CS','theme',function ($scope,dialogs,CS,theme){
+main.controller('homeworkManageCtrl', ['$scope','dialogs','CS','theme','$rootScope',function ($scope,dialogs,CS,theme,$rootScope){
     //老师管理加入的班级
+    $rootScope.contextPath = contextPath;
     CS.teacherMyClass({token:getToken()}).then(function(d){
         d= d.data;
         if(d.state){
@@ -246,7 +249,7 @@ main.controller('homeworkManageCtrl', ['$scope','dialogs','CS','theme',function 
                 $scope.getHomeworkList($scope.classes[0].classCode,1);
             }
         }else{
-            dialogs.error("error",'msg',{'width':300});
+            // dialogs.error("error",'msg',{'width':300});
         }
     });
     var date=new Date();
@@ -267,7 +270,7 @@ main.controller('homeworkManageCtrl', ['$scope','dialogs','CS','theme',function 
                     it.classNameCla=it.className.split("-")[1]
                 })
             }else{
-                dialogs.error("error",'msg',{'width':300});
+                // dialogs.error("error",'msg',{'width':300});
             }
         });
     };
@@ -285,7 +288,7 @@ main.controller('homeworkManageCtrl', ['$scope','dialogs','CS','theme',function 
                     var classCode=$scope.$parent.claModel;
                     $scope.getHomeworkList(classCode,1);
                 }else{
-                    dialogs.error("error",'msg',{'width':300});
+                    // dialogs.error("error",'msg',{'width':300});
                 }
             })
         });
@@ -307,7 +310,6 @@ main.controller('homeworkEvaluationCtrl', ['$scope','dialogs','CS','$stateParams
             if(d.state){
                 $scope.p.toAll=d.toAll;
                 $scope.p.toAllOld=d.toAll;
-                // console.log($scope.toAllOld);
                 $scope.toSome=d.toSome;
             }else{
                 dialogs.error("error",'msg',{'width':300});
@@ -393,9 +395,10 @@ main.controller('homeworkEvaluationCtrl', ['$scope','dialogs','CS','$stateParams
         CS.teacherCheckHomework(data).then(function(d){
             d=d.data;
             if(d.state){
-                $scope.homeworkTodayDetail();
+                dialogs.notify("Notify",'发布成功',{'width':300});
+                $scope.homeworkTodayDetail($stateParams.classCode);
             }else{
-                dialogs.error("error",'msg',{'width':300});            
+                // dialogs.error("error",'msg',{'width':300});            
             }
         })
     }
@@ -403,7 +406,6 @@ main.controller('homeworkEvaluationCtrl', ['$scope','dialogs','CS','$stateParams
     $scope.cancelEvaluation=function(){
         $scope.persEvalList=[{'toSelf':[],'toSelfContent':'','addBtnShow':true,'toSelfShow':false,'addStuPlshow':false,'_ind':0,isPrivat:0}];
         $scope.p.toAll='';
-        console.log($scope.p.toAll);
     }
     //获取作业展示内容
     $scope.getHomeworkList=function(){
@@ -430,7 +432,7 @@ main.controller('homeworkEvaluationCtrl', ['$scope','dialogs','CS','$stateParams
                 }
                 $scope.homework=d.homework;
             }else{
-                dialogs.error("error",'msg',{'width':300});
+                // dialogs.error("error",'msg',{'width':300});
             }
         })
     }
@@ -439,7 +441,6 @@ main.controller('homeworkEvaluationCtrl', ['$scope','dialogs','CS','$stateParams
     $scope.homeworkTodayDetail=function(classCode){
         CS.webTeacherHomeworkTodayDetail({classCode:classCode,homeworkId:$stateParams.homeworkId,token:getToken()}).then(function(d){
             d=d.data;
-            // d={"state": true, "className": "xx班", "done": [{"childAvatar": "xxx/xxx.png", "childNo": 1, "childId": 1, "childName": "马正洁", "childSex": 0, "ps": 3 }, {"childAvatar": "xxx/xxx.png", "childNo": 1, "childId": 1, "childName": "马正洁", "childSex": 0, "ps": 2 }, {"childAvatar": "xxx/xxx.png", "childNo": 1, "childId": 1, "childName": "马二洁", "childSex": 0, "ps": 0 } ], "unDone": [{"childAvatar": "xxx/xxx.png", "childNo": 1, "childId": 1, "childName": "马正洁", "childSex": 0, "ps": 4, "blank": "2,5,6"} ], "unCommit": [{"childAvatar": "xxx/xxx.png", "childNo": 1, "childId": 1, "childName": "马二洁", "childSex": 0 } ] };
             if(d.state){
                 $scope.className=d.className;
                 $scope.done= d.done;
@@ -452,13 +453,13 @@ main.controller('homeworkEvaluationCtrl', ['$scope','dialogs','CS','$stateParams
             }
         })
     }
-    $scope.homeworkTodayDetail();
+    $scope.homeworkTodayDetail($stateParams.classCode);
 
     $scope.onDetailChange=function(ind){
         $scope.onPager(1,$scope.workDetailContent[ind]);
     }
     $scope.currentPage=1;
-    $scope.pageSize=2;
+    $scope.pageSize=5;
     $scope.onPager=function(page,items){
         $scope.itemShow=items.slice((page-1)*$scope.pageSize,page*$scope.pageSize);
     }
@@ -552,7 +553,7 @@ main.controller('loginCtrl', ['$scope','$location','dialogs','CS','$rootScope',f
 main.controller('classListCtrl', ['$scope','$location','CS', '$state','dialogs','$rootScope','$stateParams',function ($scope,$location,CS,$state,dialogs,$rootScope,$stateParams){
     //老师管理加入的班级
     $scope.getClasses=function(){
-        CS.teacherMyClass({userId:'15311111111',token:getToken()}).then(function(d){
+        CS.teacherMyClass({token:getToken()}).then(function(d){
             d= d.data;
             if(d.state){
                 $scope.classes= d.classes;
@@ -567,7 +568,7 @@ main.controller('classListCtrl', ['$scope','$location','CS', '$state','dialogs',
                     $rootScope.claModel=$scope.classes[0].classCode;
                 }
             }else{
-                dialogs.error("error",'msg',{'width':300});
+                // dialogs.error("error",'msg',{'width':300});
             }
         });
     }
@@ -608,7 +609,7 @@ main.controller('navTopCtrl',['$scope','CS','dialogs','$state',function($scope,C
                 if(d.state){
                     location.href='login.jsp';
                 }else{
-                    dialogs.error('msg',{'width':300});
+                    dialogs.error('退出登录失败',{'width':300});
                 }
             })
         });
@@ -621,7 +622,7 @@ main.controller('navTopCtrl',['$scope','CS','dialogs','$state',function($scope,C
                 if(d.state){
                     location.href='login.jsp';
                 }else{
-                    dialogs.error('msg',{'width':300});
+                    dialogs.error('切换账号失败',{'width':300});
                 }
             })
         });
@@ -651,7 +652,7 @@ main.controller('addStudentCtrl',['$scope','CS','dialogs','$modalInstance',funct
                 });
             }
         }else{
-            dialogs.error('msg',{'width':300});
+            // dialogs.error('msg',{'width':300});
         }
     })
     $scope.checkedStu=function(ind){

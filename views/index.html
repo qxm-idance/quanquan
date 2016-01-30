@@ -15,23 +15,23 @@
 					</dl>
 					<dl class="join-cla">
 						<dt>加入班级：</dt>
-						<dd class="cla" ng-repeat="item in classes" ng-bind="item.classNameCla"></dd>
+						<dd class="cla" ng-repeat="item in classes" ng-bind="item.classNameCla" ng-if="item.role!='master'"></dd>
 					</dl>
 				</div>
 			</div>
 		</div>
-		<div class="logout"><a href="#" on-click="loginOut()">注销</a></div>
+		<!-- <div class="logout"><a class="login-out-btn" on-click="loginOut()">注销</a></div> -->
 	</div>
 	<div class="main-left-wrapper-two">
 		<div class="panel-set-work">
 			<div class="task">
-				<div class="task-inner bd-bt">
+				<div class="task-inner" ng-class="{'bd-bt':role=='master'}">
 					<a ng-click="setHomework()">
 						<i class="icon icon-task-work"></i>
 						<p>布置作业</p>
 					</a>
 				</div>
-				<div class="task-inner">
+				<div class="task-inner" ng-if="role=='master'">
 					<a ng-click="setNotice()">
 						<i class="icon icon-task-notice"></i>
 						<p>发布公告</p>
@@ -50,15 +50,13 @@
 		</h2>
 		<div class="mod-bd">
 			<ul class="notice-lists">
-				<li ng-repeat="item in noticeList">
+				<li ng-repeat="item in noticeList" ui-sref="noticeManage()">
 					<h3 class="theme">
 						<i class="icon" ng-class="{'icon-cla-s':item.noticeType=='班级公告','icon-sch-s':item.noticeType=='学校公告'}"></i>
 						<span class="tit" ng-bind="::item.noticeTitle"></span>
 						<span class="date">{{item.updateTime*1000 | date:'yyyy-MM-dd'}}</span>
 					</h3>
-					<p class="desc"  ng-bind="::item.content">
-						<!-- <a  ng-bind="::item.content"></a> -->
-					</p>
+					<p class="desc"  ng-bind="::item.content"></p>
 				</li>
 				<p ng-if="noticeList.length==0" class="no-data">无数据</p>
 			</ul>

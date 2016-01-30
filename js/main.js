@@ -91,8 +91,7 @@ main.factory('httpInterceptor',['$q','$rootScope',function ($q,$rootScope){
         },
         response:function(response) {
             if(response.data.expired){
-                // console.log('sessionout');
-                // $rootScope.$broadcast("session_out");
+
                 location.href='login.jsp';
             }
             return response || $q.when(response);
@@ -111,13 +110,15 @@ main.factory('httpInterceptor',['$q','$rootScope',function ($q,$rootScope){
 //         }
 //     }]);
 
-main.directive('uiSessionOut',[function(){
-    return function(scope,elem){
-        scope.$on('session_out',function(){
-            scope.visible=true;
-        });
-    }
-}]);
+// main.directive('uiSessionOut',[function(){
+//     return function(scope,elem){
+//         scope.$on('session_out',function(){
+//             scope.visible=true;
+//         });
+//     }
+// }]);
+
+
 main.config(['$httpProvider',function ($httpProvider) {
     $httpProvider.defaults.transformRequest = function transformRequest( data, getHeaders ) {
         var headers = getHeaders();
